@@ -78,6 +78,7 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -93,7 +94,7 @@ div.csl-indent {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#research-question-and-hypotheses" id="toc-research-question-and-hypotheses" class="nav-link active" data-scroll-target="#research-question-and-hypotheses">Research Question and Hypotheses</a></li>
+  <li><a href="#brief-project-overview" id="toc-brief-project-overview" class="nav-link active" data-scroll-target="#brief-project-overview">Brief Project Overview:</a></li>
   <li><a href="#estimating-partisan-identification-at-the-state-level" id="toc-estimating-partisan-identification-at-the-state-level" class="nav-link" data-scroll-target="#estimating-partisan-identification-at-the-state-level">Estimating Partisan Identification at the State Level</a>
   <ul class="collapse">
   <li><a href="#available-data" id="toc-available-data" class="nav-link" data-scroll-target="#available-data">Available Data</a>
@@ -102,7 +103,6 @@ div.csl-indent {
   <li><a href="#publicly-available-registration-data" id="toc-publicly-available-registration-data" class="nav-link" data-scroll-target="#publicly-available-registration-data">Publicly Available Registration Data</a></li>
   <li><a href="#demographic-data" id="toc-demographic-data" class="nav-link" data-scroll-target="#demographic-data">Demographic Data</a></li>
   </ul></li>
-  <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology">Methodology</a></li>
   <li><a href="#preliminary-results" id="toc-preliminary-results" class="nav-link" data-scroll-target="#preliminary-results">Preliminary Results</a></li>
   </ul></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a>
@@ -137,41 +137,42 @@ div.csl-indent {
 
 </header>
 
-<section id="research-question-and-hypotheses" class="level1">
-<h1>Research Question and Hypotheses</h1>
-<p><strong>Research question:</strong> Why does a state become a swing state, or, why do states swing in presidential elections? - Are we interested in thinking of as a temporary state or a durable trait, or both?</p>
-<section id="main-hypotheses-rough" class="level4">
-<h4 class="anchored" data-anchor-id="main-hypotheses-rough">Main Hypotheses (Rough)</h4>
+<p>Several decisions regarding methods and data remain to be made for the swing states project. This memo outlines the current state of the project and the decisions that need to be made. The main remaining issue is determining what geographic level we can feasibly use in poststratification to then aggregate to state-level estimates of partisanship.</p>
+<section id="brief-project-overview" class="level1">
+<h1>Brief Project Overview:</h1>
+<p><strong>Research question:</strong> Why does a state become a swing state, or, why do states swing in presidential elections?</p>
+<ul>
+<li>Intuition that elite polarization is a driver of swinginess</li>
+<li>Are we interested in framing our question in terms of swings being a temporary status or a durable trait of some states, or both?</li>
+</ul>
+<p><strong>Level of analysis:</strong> the 48 contiguous states (<span class="math inline">\(i\)</span>) in presidential elections (<span class="math inline">\(t\)</span>) from 1996<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> to 2020.</p>
+<p><strong>Main Hypotheses (Rough)</strong></p>
 <ol type="1">
 <li>As a given state’s legislative branch becomes more polarized, the state is more likely to swing in presidential elections.</li>
 </ol>
-</section>
-<section id="competing-hypotheses-partisanship" class="level4">
-<h4 class="anchored" data-anchor-id="competing-hypotheses-partisanship">Competing Hypotheses – Partisanship</h4>
+<p><strong>Competing Hypotheses – Partisanship</strong></p>
 <ol start="2" type="1">
 <li>As the proportion of a state’s voters identifying as true independents increases, the state is more likely to swing in presidential elections.</li>
 <li>As a state’s two-party make-up shifts towards equal proportions for both parties, the state is more likely to swing in presidential elections.</li>
 </ol>
-</section>
-<section id="causal-drivers" class="level4">
-<h4 class="anchored" data-anchor-id="causal-drivers">Causal Drivers:</h4>
+<p><strong>Causal Drivers:</strong></p>
 <ul>
 <li>elite polarization</li>
 <li>Partisan realignment: migration, birth rates, attitude shifts</li>
 </ul>
 </section>
-</section>
 <section id="estimating-partisan-identification-at-the-state-level" class="level1">
 <h1>Estimating Partisan Identification at the State Level</h1>
-<p>We will estimate our state-level partisanship variable using Multilevel Regression and Poststratification (MRP) within a Bayesian framework <span class="citation" data-cites="pacheco2011Using">Buttice and Highton (<a href="#ref-buttice2013How" role="doc-biblioref">2013</a>)</span>. To perform MRP, we need two types of data: demographic population data, and polling data. The polling data is used to fit a multinomial logistic model that estimates the individual-level probability of a given respondent identifying as a Democrat, Republican, or Independent. The administrative data is then used to create a poststratification frame, which is essentially a joint distribution of individual-level demographics that are parsed out by geographic unit(s) such as counties or states.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Each row of this distribution can be thought of as a demographic profile that exists in the population for a given geography. The frequencies of these profiles in the geographic level of interest can then be used to predict weighted probabilities of each profile identifying as a Democrat, Republican, or Independent in each state, which can then be aggregated to any available geographic level to obtain proportions of those identifying with each party.</p>
-<p>This approach aligns well with our broader project for a few reasons. Most importantly, the multilevel model allows for the pooling information across levels of the variables, which is especially useful when estimating states with small sample sizes. The multilevel model also allows us to make reasonable predictions of partisan identification for geographies that were not sampled in the available polling data for one or more years of interest. This is because in a multilevel framework we compute means at every level of analysis, which allows us to incorporate information about a state’s region and other characteristics in our estimates.</p>
-<p>The above explanation is the standard MRP implementation for estimating state-level opinion for a single year. Because we are interested in generating partisanship estimates for several years, some modifications to the above framework are necessary. Luckily, the longitudinal nature of our question can be used to our advantage when it comes to generating optimal partisanship estimates. If we combine all available polling data across years into a single dataset and estimate the model with varying year intercepts then information will also be shared across geographies in all years of the analysis, which provides additional robustness to our estimates.</p>
-<p>Another stumbling block for estimating state-level partisanship is that the available polling data is usually area-cluster sampled, which means that they are likely not representative of the individual state populations being studied. TIn many recent years, the American National Election Study has used simple random sampling to obtain a portion of its overall sample, which mitigates this issue to an extent. However, it has been proposed that the problem could be further addressed by accounting for the sampling design of area-clustered samples in the predictive model itself (<span class="citation" data-cites="stollwerkEssays">Stollwerk (<a href="#ref-stollwerkEssays" role="doc-biblioref">n.d.</a>)</span>). This is achieved by including random effects for the geographic units that were used in area clustered sampling when survey data was collected. The resulting partial pooling of information across geographies smaller than the state will improve all of our estimates because it will provide information about a state that would be otherwise missing for any given year by borrowing means generated within that state from other years during prediciton. The extent to which this approach can be implemented depends upon the available polling and demographic data.</p>
+<p>This project requires a robust partisanship covariate at the state level. Samara and Reed have been discussing this problem since the Spring, and have come up with a plan to collect estimates for the proportion of Democrats, Republicans, and Independents in each state for each year of the analysis. Because our hypothesis concerns vote choice, using data that contain measures for partisan leaning independents is a priority <span class="citation" data-cites="keith1986Partisan">(<a href="#ref-keith1986Partisan" role="doc-biblioref">Keith et al. 1986</a>)</span>. We have not been able to find this type of partisanship estimate in the existing literature. This section outlines a tentative plan and the available data.</p>
+<p>We will estimate our state-level partisanship variable using Multilevel Regression and Poststratification (MRP) within a Bayesian framework <span class="citation" data-cites="pacheco2011Using">Buttice and Highton (<a href="#ref-buttice2013How" role="doc-biblioref">2013</a>)</span>. To perform MRP, we need two types of data: demographic population data, and polling data. The polling data is used to fit a multinomial logistic model that estimates the individual-level probability of a given respondent identifying as a Democrat, Republican, or Independent. The administrative data is then used to create a poststratification frame, which is essentially a joint distribution of individual-level demographics that are parsed out by geographic unit(s) such as counties or states.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Each row of this distribution can be thought of as a demographic profile that exists in the population for a given geography. Next, the model trained on polling data is used to predicted the probability of each profile belonging to each of the three parties. The frequencies of the profiles in the geographic level of interest can then be used to predict weighted probabilities of each profile identifying as a Democrat, Republican, or Independent which can then be aggregated to any geographic level present in the polling and demographic data to obtain partisan proportions.</p>
+<p>This approach aligns well with our broader project’s goals for a few reasons. Most importantly, the multilevel model allows for information to be pooled across the levels of the variables, which is especially useful when estimating states with small sample sizes. The multilevel model also allows us to make reasonable predictions of partisan identification for geographies that were not sampled in the available polling data for one or more years of interest. This is because in a multilevel framework we compute means at every level of analysis, which allows us to incorporate information about a state’s region and other characteristics in our estimates.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>The above explanation is the standard MRP implementation for estimating state-level opinion for a single year. Because we are interested in generating partisanship estimates for several years, some modifications to the above framework are necessary. Luckily, the longitudinal nature of our question can be used to our advantage when it comes to generating optimal partisanship estimates. If we combine all available polling data across years into a single dataset and estimate the model with varying year intercepts then information will also be shared between years for the given geographies used, which will provide additional robustness to our estimates.</p>
+<p>An important obstacle for estimating state-level partisanship is that the available polling data is usually sampled using area clustering, which means that they are likely not representative of the individual state populations being studied. In many recent years, the American National Election Study has used simple random sampling to obtain a portion of its overall sample, which mitigates this issue to an extent. However, it has been proposed that the problem could be further addressed by accounting for the sampling design of area-clustered samples in the predictive model itself (<span class="citation" data-cites="stollwerkEssays">Stollwerk (<a href="#ref-stollwerkEssays" role="doc-biblioref">n.d.</a>)</span>).<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> This is achieved by including random effects for the geographic units that were used in area clustered sampling during survey sampling. The resulting partial pooling of information across geographies smaller than the state will improve all of our estimates because it will provide information about a state that would be otherwise missing for any given year by borrowing means generated within that state from other years during prediction. The extent to which this approach can be implemented depends upon the available polling and demographic data.</p>
 <section id="available-data" class="level2">
 <h2 class="anchored" data-anchor-id="available-data">Available Data</h2>
 <section id="polling-data" class="level3">
 <h3 class="anchored" data-anchor-id="polling-data">Polling Data</h3>
-<p>Because our main and perhaps only consistent source of polling data is the ANES data we have obtained access to, it would be helpful to combine the ANES with other polls. This section discusses the available polling data and its limitations.</p>
+<p>Because our main and perhaps only consistent source of polling data is the ANES data, it would be helpful to bolster the years of the ANES time-series that have smaller smaller samples by combining them with other polls. This section discusses the available polling data and its limitations.</p>
 <section id="existing-estimates" class="level4">
 <h4 class="anchored" data-anchor-id="existing-estimates">Existing Estimates</h4>
 <p><span class="citation" data-cites="pacheco2014Measuring">Pacheco (<a href="#ref-pacheco2014Measuring" role="doc-biblioref">2014</a>)</span> provides poll-based estimates for the proportion of Democrat identifiers out of all partisans (Republicans Democrats, and Independents) for 1978 to 2010. These estimates are primarily based on CBS/NYT polls. They utilize an older and less accurate approach to MRP that does not utilize multiple deep interactions when specifying the multilevel model (called “deep MRP”) <span class="citation" data-cites="goplerud2023ReEvaluating">(see <a href="#ref-goplerud2023ReEvaluating" role="doc-biblioref">Goplerud 2023</a>)</span>, and they don’t account for the sampling design of the polls <span class="citation" data-cites="auslen2023Improving stollwerkEssays">(<a href="#ref-auslen2023Improving" role="doc-biblioref">Auslen 2023</a>; <a href="#ref-stollwerkEssays" role="doc-biblioref">Stollwerk n.d.</a>)</span>, making them of limited use for our purposes.</p>
@@ -195,25 +196,25 @@ div.csl-indent {
 <li>excellent temporal coverage for its partisanship variable, going back to 1974</li>
 <li>Doesn’t include state of residence by default</li>
 <li>Doesn’t have a question that parses partisan leaners out of the independent category</li>
-<li>Applying for restricted data access so we can use geocodes is an option</li>
+<li>Applying for restricted data access for geocodes may be an option</li>
 </ul></li>
 <li><p><a href="https://www.voterstudygroup.org/data">Nationscape</a> data appears to be very promising for geographic coverage, but it only began being collected in 2016.</p></li>
 <li><p><a href="https://ropercenter.cornell.edu/ipoll/">Roper Center for Public Opinion Research’s iPoll database</a> of polls.</p>
 <ul>
-<li>Many of these are by news agencies</li>
+<li>Many of these are done by news agencies</li>
 <li>question wordings vary from those in the ANES, and I haven’t come across leaners being parsed out anywhere in this database</li>
-<li>The problem of not having substate geographies is present</li>
+<li>haven’t found any surveys that include sub-state geographies</li>
 </ul></li>
 </ul>
 </section>
 <section id="polling-data-summary" class="level4">
 <h4 class="anchored" data-anchor-id="polling-data-summary">Polling Data Summary</h4>
-<p>Besides the ANES, polls are sparse and most comparable data is only readily available for recent years. This is a concern because, if the needed data were available, one benefit of adding additional polls is a more geographic diversity within states and less missing data at the state level. Because we can’t add additional data for the earlier half of our time-series where we need it the most, the utility of adding additional polls is limited. Another concern is the overall balance of the data. If we add additional polls for later years we risk artificially inflating their sample sizes and weighting all model estimates towards the means for later years. Because data is mostly missing or insufficient in the earlier years wher we need it most, it is possible that we will obtain better results by using the ANES data alone.</p>
+<p>Polls are sparse and those that are comparable to the ANES are only available for recent years. This is a concern because it limits our ability to increase within-state geographic diversity and decrease missing data at the state level due to some states not being polled in a given year of ANES data. Because we can’t add additional data for the earlier half of our time-series where we need it the most, the utility of adding additional polls is limited. Another concern is the overall balance of the data. If we add additional polls for later years we risk artificially inflating their sample sizes and weighting all model estimates towards the means for later years.</p>
 </section>
 </section>
 <section id="publicly-available-registration-data" class="level3">
 <h3 class="anchored" data-anchor-id="publicly-available-registration-data">Publicly Available Registration Data</h3>
-<p>One good source of data would be the publicly registration data, however some states don’t report the partisanship of their registered voters, and the data becomes more sparse the further back in time we go. Figure 1 shows the missingness of the registration data by state and year. Each “row” in the graph represents one state in a given year (1988 to 2020).</p>
+<p>One good source of data would be publicly available registration data, however some states don’t report the partisanship of their registered voters, and the data becomes more sparse the further back in time we go. Figure 1 shows the missingness of the registration data by state and year. Each “row” in the graph represents one state in a given year (1988 to 2020). Of course, leaners are not dealt with in this data.</p>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/registration-data-1.png" class="img-fluid" width="480"></p>
@@ -222,7 +223,7 @@ div.csl-indent {
 </section>
 <section id="demographic-data" class="level3">
 <h3 class="anchored" data-anchor-id="demographic-data">Demographic Data</h3>
-<p>The availability of census-based demographic data also affects the type of partisanship model we can specify. The table below summarizes the census-based data that is available.</p>
+<p>The availability of census-based demographic data also affects the type of partisanship model we can specify because it determines what geographic breakdowns are possible for poststratification. The table below summarizes the census-based data that is available.</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="table table-sm table-striped">
@@ -294,14 +295,202 @@ div.csl-indent {
 </table>
 </div>
 </div>
-<p>The demographic variables we need so we can generate a joint distributions for poststratifying (age, race, sex, educational attainment) are available in the 1980, 1990, and 2000 but not the 2010 or 2020 decennial censuses, likely because the American Community Survey (ACS) replaced the long-form census in 2010. One joint distribution is needed for each year of polling data we have, which will match presidential election years. Breakdowns of these demographics by geographies smaller than the state are available in all of the decennial censuses, and Google Cloud provides complete breakdowns of these demographics by state, county, and census tract for the ACS. Because of the limitations in the census-based data, it seems best to use decennial censuses for the earlier years and the ACS for the years it is available. For earlier years it will be necessary to interpollate new distributions for the years in between the decennial censuses, as <span class="citation" data-cites="kastellec2015Polarizing">Kastellec et al. (<a href="#ref-kastellec2015Polarizing" role="doc-biblioref">2015</a>)</span> did. Interpolation is also needed for the years between 2000 and 2010, where we would have to use the 2000 decennial census and the 2010 ACS. For years falling between 2010 to 2020 or we could use the ACS without interpolation because it is available for every year in that range, or interpollate for the sake of consistency.</p>
+<p>One joint distribution of demographics and our chosen sub-national geography is needed for each year of estimates. The demographic variables required to generate joint distributions for poststratifying (age, race, sex, educational attainment) are available in the 1980, 1990, and 2000 but not the 2010 or 2020 decennial censuses. This is likely because the American Community Survey (ACS) replaced the long-form census in 2010. Breakdowns of the needed demographics by geographies smaller than the state are available in all of the decennial censuses, and Google Cloud provides complete breakdowns of these demographics by state, county, and census tract from the ACS. Because of the limitations in the census-based data, it seems best to use decennial censuses for the earlier years and the ACS for the years it is available. For earlier years it will be necessary to interpolate new distributions for the years in between the decennial censuses, as <span class="citation" data-cites="kastellec2015Polarizing">Kastellec et al. (<a href="#ref-kastellec2015Polarizing" role="doc-biblioref">2015</a>)</span> did. Interpolation is also needed for the years between 2000 and 2010, where we would have to use the 2000 decennial census and the 2010 ACS. For years falling between 2010 to 2020 we could use the ACS without interpolation because it is available for every year in that range, or interpolate for the sake of consistency.</p>
 </section>
-</section>
-<section id="methodology" class="level2">
-<h2 class="anchored" data-anchor-id="methodology">Methodology</h2>
 </section>
 <section id="preliminary-results" class="level2">
 <h2 class="anchored" data-anchor-id="preliminary-results">Preliminary Results</h2>
+<p>I have spent some time testing different specifications for the predictive model. The results below are on state-level partisanship using MRP, as well as an estimate using a simple disaggregated mean that was poststratified using the same weights as the other estimates. These models were all fit on a single year of survey data (2012) without including effects for any smaller-order geographies and the postsratified to the state level. Following the same specification as <span class="citation" data-cites="gelmanChapter">Gelman (<a href="#ref-gelmanChapter" role="doc-biblioref">n.d.</a>)</span>, the baseline model (model 2) is specified as follows:</p>
+<p><span class="math display">\[
+\frac{P(Y = k | \mathbf{X})}{P(Y = K | \mathbf{X})} =
+\text{logit}^{-1}\left(
+\alpha_{\rm s[i]}^{\rm state}
+\alpha_{\rm a[i]}^{\rm age}
+\alpha_{\rm r[i]}^{\rm eth}
+\alpha_{\rm e[i]}^{\rm educ}
+\beta^{\rm male} \cdot {\rm Male}_{\rm i}
+\alpha_{\rm g[i], r[i]}^{\rm male.eth}
+\alpha_{\rm e[i], a[i]}^{\rm educ.age}
+\alpha_{\rm e[i], r[i]}^{\rm educ.eth}
+\right)
+\]</span></p>
+<p>where:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\alpha_{\rm s}^{\rm state} &amp;\sim {\rm normal}(\gamma^0 + \gamma^{\rm south} \cdot {\rm South}_{\rm s} + \gamma^{\rm northcentral} \cdot {\rm NorthCentral}_{\rm s} + \gamma^{\rm west} \cdot {\rm West}_{\rm s} \\ &amp; \quad + \gamma^{\rm repvote} \cdot {\rm RepVote}_{\rm s}, \sigma^{\rm state}) \textrm{ for s = 1,...,48}\\
+\alpha_{\rm a}^{\rm age} &amp; \sim {\rm normal}(0,\sigma^{\rm age}) \textrm{ for a = 1,...,6}\\
+\alpha_{\rm r}^{\rm eth} &amp; \sim {\rm normal}(0,\sigma^{\rm eth}) \textrm{ for r = 1,...,4}\\
+\alpha_{\rm e}^{\rm educ} &amp; \sim {\rm normal}(0,\sigma^{\rm educ}) \textrm{ for e = 1,...,5}\\
+\alpha_{\rm g,r}^{\rm male.eth} &amp; \sim {\rm normal}(0,\sigma^{\rm male.eth}) \textrm{ for g = 1,2 and r = 1,...,4}\\
+\alpha_{\rm e,a}^{\rm educ.age} &amp; \sim {\rm normal}(0,\sigma^{\rm educ.age}) \textrm{ for e = 1,...,5 and a = 1,...,6}\\
+\alpha_{\rm e,r}^{\rm educ.eth} &amp; \sim {\rm normal}(0,\sigma^{\rm educ.eth}) \textrm{ for e = 1,...,5 and r = 1,...,4}\\
+\end{aligned}
+\]</span></p>
+<div class="cell">
+
+</div>
+<p><strong>Overall Performance</strong></p>
+<div class="cell-output-display">
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">model</th>
+<th style="text-align: right;">r</th>
+<th style="text-align: right;">r (conf. low)</th>
+<th style="text-align: right;">r (conf. high)</th>
+<th style="text-align: right;">MAE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">0.9289135</td>
+<td style="text-align: right;">0.9024652</td>
+<td style="text-align: right;">0.9483844</td>
+<td style="text-align: right;">0.0462896</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">0.9432210</td>
+<td style="text-align: right;">0.9218804</td>
+<td style="text-align: right;">0.9588566</td>
+<td style="text-align: right;">0.0438672</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">0.9425482</td>
+<td style="text-align: right;">0.9209649</td>
+<td style="text-align: right;">0.9583651</td>
+<td style="text-align: right;">0.0436026</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">0.9403045</td>
+<td style="text-align: right;">0.9176326</td>
+<td style="text-align: right;">0.9568762</td>
+<td style="text-align: right;">0.0471264</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>By Party</strong></p>
+<div class="cell-output-display">
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">model</th>
+<th style="text-align: left;">party</th>
+<th style="text-align: right;">r</th>
+<th style="text-align: right;">r (conf. low)</th>
+<th style="text-align: right;">r (conf. high)</th>
+<th style="text-align: right;">MAE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">dem</td>
+<td style="text-align: right;">0.7184619</td>
+<td style="text-align: right;">0.5457332</td>
+<td style="text-align: right;">0.8326247</td>
+<td style="text-align: right;">0.0498917</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">ind</td>
+<td style="text-align: right;">0.2020227</td>
+<td style="text-align: right;">-0.0871124</td>
+<td style="text-align: right;">0.4597661</td>
+<td style="text-align: right;">0.0345538</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">rep</td>
+<td style="text-align: right;">0.6018159</td>
+<td style="text-align: right;">0.3832087</td>
+<td style="text-align: right;">0.7565782</td>
+<td style="text-align: right;">0.0544234</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">dem</td>
+<td style="text-align: right;">0.7706026</td>
+<td style="text-align: right;">0.6228424</td>
+<td style="text-align: right;">0.8652800</td>
+<td style="text-align: right;">0.0502088</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">ind</td>
+<td style="text-align: right;">0.1410688</td>
+<td style="text-align: right;">-0.1490398</td>
+<td style="text-align: right;">0.4088171</td>
+<td style="text-align: right;">0.0351274</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">rep</td>
+<td style="text-align: right;">0.7261827</td>
+<td style="text-align: right;">0.5569696</td>
+<td style="text-align: right;">0.8375107</td>
+<td style="text-align: right;">0.0462654</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">dem</td>
+<td style="text-align: right;">0.7663648</td>
+<td style="text-align: right;">0.6164662</td>
+<td style="text-align: right;">0.8626556</td>
+<td style="text-align: right;">0.0500927</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">ind</td>
+<td style="text-align: right;">0.1870538</td>
+<td style="text-align: right;">-0.1025302</td>
+<td style="text-align: right;">0.4474094</td>
+<td style="text-align: right;">0.0342189</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">rep</td>
+<td style="text-align: right;">0.7221757</td>
+<td style="text-align: right;">0.5511302</td>
+<td style="text-align: right;">0.8349771</td>
+<td style="text-align: right;">0.0464962</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">dem</td>
+<td style="text-align: right;">0.7585649</td>
+<td style="text-align: right;">0.6026834</td>
+<td style="text-align: right;">0.8586812</td>
+<td style="text-align: right;">0.0558194</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">ind</td>
+<td style="text-align: right;">0.2336555</td>
+<td style="text-align: right;">-0.0573601</td>
+<td style="text-align: right;">0.4880735</td>
+<td style="text-align: right;">0.0375505</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">rep</td>
+<td style="text-align: right;">0.7837808</td>
+<td style="text-align: right;">0.6408550</td>
+<td style="text-align: right;">0.8741888</td>
+<td style="text-align: right;">0.0480092</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/plot%201-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 </section>
 </section>
 <section id="summary" class="level1">
@@ -334,11 +523,17 @@ Goplerud, Max. 2023. <span>“Re-<span>Evaluating Machine Learning</span> for <s
 <div id="ref-kastellec2015Polarizing" class="csl-entry" role="doc-biblioentry">
 Kastellec, Jonathan P., Jeffrey R. Lax, Michael Malecki, and Justin H. Phillips. 2015. <span>“Polarizing the <span>Electoral Connection</span>: <span>Partisan Representation</span> in <span>Supreme Court Confirmation Politics</span>.”</span> <em>The Journal of Politics</em> 77 (3): 787–804. <a href="https://doi.org/10.1086/681261">https://doi.org/10.1086/681261</a>.
 </div>
+<div id="ref-keith1986Partisan" class="csl-entry" role="doc-biblioentry">
+Keith, B., David B. Magleby, Candice J. Nelson, E. Orr, Mark C. Westlye, and R. Wolfinger. 1986. <span>“The <span>Partisan Affinities</span> of <span>Independent</span> <span>‘<span>Leaners</span>’</span>.”</span> <em>British Journal of Political Science</em> 16. <a href="https://doi.org/10.1017/S0007123400003872">https://doi.org/10.1017/S0007123400003872</a>.
+</div>
 <div id="ref-pacheco2011Using" class="csl-entry" role="doc-biblioentry">
 Pacheco, Julianna. 2011. <span>“Using <span>National Surveys</span> to <span>Measure Dynamic U</span>.<span>S</span>. <span>State Public Opinion</span>: <span>A Guideline</span> for <span>Scholars</span> and an <span>Application</span>.”</span> <em>State Politics &amp; Policy Quarterly</em> 11 (4): 415–39. <a href="https://doi.org/10.1177/1532440011419287">https://doi.org/10.1177/1532440011419287</a>.
 </div>
 <div id="ref-pacheco2014Measuring" class="csl-entry" role="doc-biblioentry">
 ———. 2014. <span>“Measuring and <span>Evaluating Changes</span> in <span>State Opinion Across Eight Issues</span>.”</span> <em>American Politics Research</em> 42 (6): 986–1009. <a href="https://doi.org/10.1177/1532673X14524819">https://doi.org/10.1177/1532673X14524819</a>.
+</div>
+<div id="ref-shor2022Two" class="csl-entry" role="doc-biblioentry">
+Shor, Boris, and Nolan McCarty. 2022. <span>“Two <span>Decades</span> of <span>Polarization</span> in <span>American State Legislatures</span>.”</span> <em>Journal of Political Institutions and Political Economy</em> 3 (3-4): 343–70.
 </div>
 <div id="ref-stollwerkEssays" class="csl-entry" role="doc-biblioentry">
 Stollwerk, Alissa. n.d. <em>Essays on the <span>Measurement</span> of <span>Public Opinion</span></em>. Accessed February 21, 2023.
@@ -346,7 +541,10 @@ Stollwerk, Alissa. n.d. <em>Essays on the <span>Measurement</span> of <span>Publ
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>The weighting process is also greatly improved by the incluion of state-level predictors, such as the state’s region, previous electoral returns, and so on. This are included in the model as fixed effects, and must also be included in the poststratification frames in order for predictions to be possible.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>The <span class="citation" data-cites="shor2022Two">Shor and McCarty (<a href="#ref-shor2022Two" role="doc-biblioref">2022</a>)</span> elite polarization data goes back to 1996, setting a lower bound for our time-series.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>We will likely include region, state, and county or census tract predictors in our model, which means that estimates for missing counties can be imputed using state and regional information the same way region can inform estimates for states that were not polled in a given year.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>The weighting process is greatly improved by the inclusion of state-level predictors, such as the state’s region, previous electoral returns, and so on. These are included in the model as fixed effects, and must also be included in the poststratification frames in order for predictions to be possible.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><span class="citation" data-cites="stollwerkEssays">Stollwerk (<a href="#ref-stollwerkEssays" role="doc-biblioref">n.d.</a>)</span> was not able to implement this approach due to data restrictions, however, even without directly incorporating the sampling design of the polls, they were able to improve their estimates by including random effects for Congressional districts.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
